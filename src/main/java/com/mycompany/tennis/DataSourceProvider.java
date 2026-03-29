@@ -12,7 +12,7 @@ public class DataSourceProvider {
         if (singleDataSource == null) {
             singleDataSource = new BasicDataSource();
             singleDataSource.setInitialSize(5);
-            singleDataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&allowPublicKeyRetrieval=true");
+            singleDataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Paris");
             singleDataSource.setUsername("coursdb");
             singleDataSource.setPassword("password");
         }
