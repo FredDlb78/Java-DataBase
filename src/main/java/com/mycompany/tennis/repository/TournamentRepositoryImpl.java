@@ -2,42 +2,39 @@ package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
 import com.mycompany.tennis.entity.Player;
+import com.mycompany.tennis.entity.Tournament;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerRepositoryImpl {
+public class TournamentRepositoryImpl {
 
-    public void create(Player player) {
+    public void create(Tournament tournament) {
         Connection conn = null;
         try {
             DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
             conn = dataSource.getConnection();
-
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO JOUEUR (NOM, PRENOM, SEXE) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO TOURNOI (NOM, CODE) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setString(1, player.getLastname());
-            preparedStatement.setString(2, player.getFirstname());
-            preparedStatement.setString(3, player.getSex().toString());
+            preparedStatement.setString(1, tournament.getName());
+            preparedStatement.setString(2, tournament.getCode());
 
             preparedStatement.executeUpdate();
 
             ResultSet rs = preparedStatement.getGeneratedKeys();
 
             if (rs.next()) {
-                player.setId(rs.getLong(1));
+                tournament.setId(rs.getLong(1));
             }
 
             conn.commit();
-
-            //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur créé.");
+            System.out.println("Tournoi créé.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -56,29 +53,24 @@ public class PlayerRepositoryImpl {
         }
     }
 
-    public void update(Player player) {
+    public void update(Tournament tournament) {
         Connection conn = null;
         try {
             DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
             conn = dataSource.getConnection();
-
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE JOUEUR SET NOM=?, PRENOM=? , SEXE=? WHERE ID=?");
+            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE TOURNOI SET NOM=?, CODE=? WHERE ID=?");
 
-            preparedStatement.setString(1, player.getLastname());
-            preparedStatement.setString(2, player.getFirstname());
-            preparedStatement.setString(3, player.getSex().toString());
-            preparedStatement.setLong(4, player.getId());
+            preparedStatement.setString(1, tournament.getName());
+            preparedStatement.setString(2, tournament.getCode());
+            preparedStatement.setLong(3, tournament.getId());
 
             preparedStatement.executeUpdate();
-
             conn.commit();
-
-            //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur modifié.");
+            System.out.println("Tournoi modifié.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -102,21 +94,16 @@ public class PlayerRepositoryImpl {
         try {
             DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
             conn = dataSource.getConnection();
-
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM JOUEUR WHERE ID=?");
-
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM TOURNOI WHERE ID=?");
             preparedStatement.setLong(1, id);
-
             preparedStatement.executeUpdate();
 
             conn.commit();
-
-            //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur supprimé.");
+            System.out.println("Tournoi supprimé.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -135,35 +122,29 @@ public class PlayerRepositoryImpl {
         }
     }
 
-    public Player getById(Long id) {
+    public Tournament getById(Long id) {
         Connection conn = null;
-        Player player = null;
+        Tournament tournament = null;
         try {
             DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
             conn = dataSource.getConnection();
-
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT NOM, PRENOM, SEXE FROM JOUEUR WHERE ID=?");
-
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT NOM, CODE FROM TOURNOI WHERE ID=?");
             preparedStatement.setLong(1, id);
-
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                player = new Player();
-                player.setId(id);
-                player.setLastname(rs.getString("NOM"));
-                player.setFirstname(rs.getString("PRENOM"));
-                player.setSex(rs.getString("SEXE").charAt(0));
+                tournament = new Tournament();
+                tournament.setId(id);
+                tournament.setName(rs.getString("NOM"));
+                tournament.setCode(rs.getString("CODE"));
             }
 
             conn.commit();
-
-            //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur lu.");
+            System.out.println("Tournoi lu.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -180,37 +161,33 @@ public class PlayerRepositoryImpl {
                 e.printStackTrace();
             }
         }
-        return player;
+        return tournament;
     }
 
-    public List<Player> getPlayersList() {
+    public List<Tournament> getTournamentList() {
         Connection conn = null;
-        List<Player> players = new ArrayList<>();
+        List<Tournament> tournaments = new ArrayList<>();
         try {
             DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
             conn = dataSource.getConnection();
-
             conn.setAutoCommit(false);
 
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT ID, NOM, PRENOM, SEXE FROM JOUEUR");
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT ID, NOM, CODE FROM TOURNOI");
 
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Player player = new Player();
-                player.setId(rs.getLong("ID"));
-                player.setLastname(rs.getString("NOM"));
-                player.setFirstname(rs.getString("PRENOM"));
-                player.setSex(rs.getString("SEXE").charAt(0));
-                players.add(player);
+                Tournament tournament = new Tournament();
+                tournament.setId(rs.getLong("ID"));
+                tournament.setName(rs.getString("NOM"));
+                tournament.setCode(rs.getString("CODE"));
+                tournaments.add(tournament);
             }
 
             conn.commit();
-
-            //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur lu.");
+            System.out.println("Tournois lus.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -227,6 +204,7 @@ public class PlayerRepositoryImpl {
                 e.printStackTrace();
             }
         }
-        return players;
+        return tournaments;
     }
+
 }

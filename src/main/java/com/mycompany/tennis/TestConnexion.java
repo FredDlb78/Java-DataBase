@@ -1,17 +1,18 @@
 package com.mycompany.tennis;
 
-import com.mycompany.tennis.entity.Player;
-import com.mycompany.tennis.repository.PlayerRepositoryImpl;
+import com.mycompany.tennis.entity.Tournament;
+import com.mycompany.tennis.repository.TournamentRepositoryImpl;
 
 import java.util.List;
 
+
 public class TestConnexion {
     public static void main(String... args) {
-        PlayerRepositoryImpl playerRepository = new PlayerRepositoryImpl();
-        List<Player> players = playerRepository.getPlayersList();
+        TournamentRepositoryImpl tournamentRepository = new TournamentRepositoryImpl();
+        List<Tournament> tournaments = tournamentRepository.getTournamentList();
 
-        for (Player player : players) {
-            System.out.println("Nom " + player.getLastname() + " , Prénom : " + player.getFirstname());
+        for (Tournament tournament : tournaments) {
+            System.out.println("id: " + tournament.getId() + ", Nom :" + tournament.getName() + ", Code: " + tournament.getCode());
         }
     }
 }
