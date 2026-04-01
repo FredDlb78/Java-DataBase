@@ -16,6 +16,6 @@ public class TestConnexion {
 
         System.out.println("-----Avec .stream().forEarch()-----");
         tournamentRepository.getTournamentList().stream()
-                .forEach(t -> System.out.println("id: " + t.getId() + ", Nom: " + t.getName() + ", Code: " + t.getCode()));
+                .forEach(tournament -> System.out.println("id: " + tournament.getId() + ", Nom: " + tournament.getName() + ", Code: " + tournament.getCode()));
     }
 }
