@@ -37,7 +37,7 @@ public class PlayerRepositoryImpl {
             //registeredModifications.close();
             preparedStatement.close();
 
-            System.out.println("Joueur créé.");
+            //System.out.println("Joueur créé.");
         } catch (SQLException e) {
             e.printStackTrace();
             try {
