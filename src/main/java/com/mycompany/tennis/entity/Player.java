@@ -1,10 +1,19 @@
 package com.mycompany.tennis.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "JOUEUR")
 public class Player {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "NOM")
     private String lastname;
+    @Column(name = "PRENOM")
     private String firstname;
+    @Column(name = "SEXE")
     private Character sex;
 
     public Long getId() {
