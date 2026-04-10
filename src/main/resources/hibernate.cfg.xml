@@ -6,7 +6,7 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property><!-- ou son nouveau nom com.mysql.cj.jdbc.Driver -->
-        <property name="connection.url">jdbc:mysql://localhost:3306/tennis?useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Europe/Paris</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/tennis?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Europe/Paris</property>
         <property name="connection.username">coursdb</property>
         <property name="connection.password">password</property>
 
