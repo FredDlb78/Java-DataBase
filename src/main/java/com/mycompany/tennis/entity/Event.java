@@ -17,7 +17,8 @@ public class Event {
     @Column(name = "TYPE_EPREUVE", nullable = true, length = 2000)
     private char eventType;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "ID_TOURNOI")
     private Tournament tournament;
 
     public Long getId() {
