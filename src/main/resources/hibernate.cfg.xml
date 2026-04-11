@@ -38,6 +38,8 @@
         <mapping class="com.mycompany.tennis.entity.Player" />
         <mapping class="com.mycompany.tennis.entity.Tournament" />
         <mapping class="com.mycompany.tennis.entity.Event" />
+        <mapping class="com.mycompany.tennis.entity.Score" />
+        <mapping class="com.mycompany.tennis.entity.Match" />
 
     </session-factory>
 

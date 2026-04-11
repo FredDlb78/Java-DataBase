@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "EPREUVE")
 public class Event {
 
     @Id
