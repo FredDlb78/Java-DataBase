@@ -37,6 +37,7 @@
 		<!-- Enities to map -->
         <mapping class="com.mycompany.tennis.entity.Player" />
         <mapping class="com.mycompany.tennis.entity.Tournament" />
+        <mapping class="com.mycompany.tennis.entity.Event" />
 
     </session-factory>
 

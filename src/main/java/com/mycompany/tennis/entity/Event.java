@@ -14,6 +14,9 @@ public class Event {
     @Type(type = "short")
     private Short year;
     @Column(name = "TYPE_EPREUVE", nullable = true, length = 2000)
+    private char eventType;
+
+    @Transient
     private Tournament tournament;
 
     public Long getId() {
@@ -47,7 +50,4 @@ public class Event {
     public void setEventType(char eventType) {
         this.eventType = eventType;
     }
-
-    private char eventType;
-
 }
