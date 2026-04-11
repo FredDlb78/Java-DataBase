@@ -74,36 +74,10 @@ public class TournamentRepositoryImpl {
     }
 
     public void delete(Long id) {
-        Connection conn = null;
-        try {
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-            conn = dataSource.getConnection();
-            conn.setAutoCommit(false);
-
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM TOURNOI WHERE ID=?");
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-
-            conn.commit();
-            preparedStatement.close();
-
-            System.out.println("Tournoi supprimé.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Tournament tournament = session.get(Tournament.class, id);
+        session.delete(tournament);
+        System.out.println("Tournoi supprimé.");
     }
 
     public Tournament getById(Long id) {

@@ -1,9 +1,19 @@
 package com.mycompany.tennis.entity;
 
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+
+@Entity
 public class Event {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "ANNEE")
+    @Type(type = "short")
     private Short year;
+    @Column(name = "TYPE_EPREUVE", nullable = true, length = 2000)
     private Tournament tournament;
 
     public Long getId() {

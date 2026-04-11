@@ -78,41 +78,10 @@ public class PlayerRepositoryImpl {
     }
 
     public void delete(Long id) {
-        Connection conn = null;
-        try {
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-            conn = dataSource.getConnection();
-
-            conn.setAutoCommit(false);
-
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM JOUEUR WHERE ID=?");
-
-            preparedStatement.setLong(1, id);
-
-            preparedStatement.executeUpdate();
-
-            conn.commit();
-
-            //registeredModifications.close();
-            preparedStatement.close();
-
-            System.out.println("Joueur supprimé.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Player player = session.get(Player.class, id);
+        session.delete(player);
+        System.out.println("Joueur supprimé.");
     }
 
     public Player getById(Long id) {
