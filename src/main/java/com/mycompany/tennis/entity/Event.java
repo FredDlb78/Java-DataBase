@@ -17,7 +17,7 @@ public class Event {
     @Column(name = "TYPE_EPREUVE", nullable = true, length = 2000)
     private char eventType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_TOURNOI")
     private Tournament tournament;
 
