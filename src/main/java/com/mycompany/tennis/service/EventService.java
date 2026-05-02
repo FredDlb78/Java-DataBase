@@ -27,7 +27,7 @@ public class EventService {
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             tx = session.beginTransaction();
             event = eventRepository.getById(id);
-            Hibernate.initialize(event.getTournament());
+            //Hibernate.initialize(event.getTournament());
             dto = new EventFullDTO();
             dto.setId(event.getId());
             dto.setYear(event.getYear());
@@ -37,7 +37,7 @@ public class EventService {
             tournamentDTO.setCode(event.getTournament().getCode());
             tournamentDTO.setName(event.getTournament().getName());
             dto.setTournamentDTO(tournamentDTO);
-
+            tx.commit();
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
@@ -64,6 +64,7 @@ public class EventService {
             dto.setId(event.getId());
             dto.setYear(event.getYear());
             dto.setEventType(event.getEventType());
+            tx.commit();
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
