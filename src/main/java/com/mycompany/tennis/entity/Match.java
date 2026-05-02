@@ -1,16 +1,27 @@
 package com.mycompany.tennis.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-//@Entity
-//@Table(name = "MATCH_TENNIS")
+@Entity
+@Table(name = "MATCH_TENNIS")
 public class Match {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_VAINQUEUR")
     private Player winner;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_FINALISTE")
     private Player finalist;
+
+    @Transient
     private Event event;
+
+    @Transient
     private Score score;
 
     public Long getId() {
