@@ -5,6 +5,7 @@ public class MatchDTO {
     private Long id;
     private PlayerDTO winner;
     private PlayerDTO finalist;
+    private EventFullDTO event;
 
     public Long getId() {
         return id;
@@ -28,5 +29,13 @@ public class MatchDTO {
 
     public void setFinalist(PlayerDTO finalist) {
         this.finalist = finalist;
+    }
+
+    public EventFullDTO getEvent() {
+        return event;
+    }
+
+    public void setEvent(EventFullDTO event) {
+        this.event = event;
     }
 }

@@ -18,7 +18,8 @@ public class Match {
     @JoinColumn(name = "ID_FINALISTE")
     private Player finalist;
 
-    @Transient
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_EPREUVE")
     private Event event;
 
     @Transient
