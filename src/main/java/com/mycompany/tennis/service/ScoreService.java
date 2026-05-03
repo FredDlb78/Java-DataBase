@@ -1,7 +1,10 @@
 package com.mycompany.tennis.service;
 
 import com.mycompany.tennis.HibernateUtil;
+import com.mycompany.tennis.dto.*;
+import com.mycompany.tennis.entity.Event;
 import com.mycompany.tennis.entity.Score;
+import com.mycompany.tennis.entity.Tournament;
 import com.mycompany.tennis.repository.ScoreRepositoryImpl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,20 +12,50 @@ import org.hibernate.Transaction;
 public class ScoreService {
 
     private ScoreRepositoryImpl scoreRepository;
+    private ScoreFullDTO scoreDTO;
 
     public ScoreService() {
         this.scoreRepository = new ScoreRepositoryImpl();
+        this.scoreDTO = new ScoreFullDTO();
     }
 
-    public Score getScore(Long id) {
+    public ScoreFullDTO getScore(Long id) {
         Session session = null;
         Transaction tx = null;
         Score score = null;
+        ScoreFullDTO dto = null;
 
         try {
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             tx = session.beginTransaction();
             score = scoreRepository.getById(id);
+
+            dto = new ScoreFullDTO();
+            dto.setId(score.getId());
+            dto.setSet1(score.getSet1());
+            dto.setSet2(score.getSet2());
+            dto.setSet3(score.getSet3());
+            dto.setSet4(score.getSet4());
+            dto.setSet5(score.getSet5());
+
+            MatchDTO match = new MatchDTO();
+            match.setId(score.getMatch().getId());
+            dto.setMatch(match);
+
+            EventFullDTO eventDTO = new EventFullDTO();
+            Event event = score.getMatch().getEvent();
+            eventDTO.setId(event.getId());
+            eventDTO.setYear(event.getYear());
+            eventDTO.setEventType(event.getEventType());
+
+            TournamentDTO tournamentDTO = new TournamentDTO();
+            Tournament tournament = event.getTournament();
+            tournamentDTO.setId(tournament.getId());
+            tournamentDTO.setCode(tournament.getCode());
+            tournamentDTO.setName(tournament.getName());
+            eventDTO.setTournamentDTO(tournamentDTO);
+
+            match.setEvent(eventDTO);
 
             tx.commit();
         } catch (Exception e) {
@@ -37,7 +70,7 @@ public class ScoreService {
             }
         }
 
-        return score;
+        return dto;
     }
 
 }
