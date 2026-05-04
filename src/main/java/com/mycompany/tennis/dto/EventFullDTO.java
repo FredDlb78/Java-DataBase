@@ -1,13 +1,22 @@
 package com.mycompany.tennis.dto;
 
-import com.mycompany.tennis.entity.Event;
+import java.util.Set;
 
-public class EventFullDTO extends Event {
+public class EventFullDTO {
 
     private Long id;
     private Short year;
     private char eventType;
     private TournamentDTO tournamentDTO;
+    private Set<PlayerDTO> participants;
+
+    public Set<PlayerDTO> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<PlayerDTO> participants) {
+        this.participants = participants;
+    }
 
     public Long getId() {
         return id;

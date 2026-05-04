@@ -3,6 +3,7 @@ package com.mycompany.tennis.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "EPREUVE")
@@ -20,6 +21,22 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_TOURNOI")
     private Tournament tournament;
+
+    @ManyToMany
+    @JoinTable(
+            name = "PARTICIPANTS",
+            joinColumns = {@JoinColumn(name = "ID_EPREUVE")},
+            inverseJoinColumns = {@JoinColumn(name = "ID_JOUEUR")}
+    )
+    private Set<Player> participants;
+
+    public Set<Player> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<Player> participants) {
+        this.participants = participants;
+    }
 
     public Long getId() {
         return id;
