@@ -40,6 +40,21 @@ public class ScoreService {
 
             MatchDTO match = new MatchDTO();
             match.setId(score.getMatch().getId());
+
+            PlayerDTO winnerDTO = new PlayerDTO();
+            winnerDTO.setId(score.getMatch().getWinner().getId());
+            winnerDTO.setFirstname(score.getMatch().getWinner().getFirstname());
+            winnerDTO.setLastname(score.getMatch().getWinner().getLastname());
+            winnerDTO.setSex(score.getMatch().getWinner().getSex());
+            match.setWinner(winnerDTO);
+
+            PlayerDTO finalistDTO = new PlayerDTO();
+            finalistDTO.setId(score.getMatch().getFinalist().getId());
+            finalistDTO.setFirstname(score.getMatch().getFinalist().getFirstname());
+            finalistDTO.setLastname(score.getMatch().getFinalist().getLastname());
+            finalistDTO.setSex(score.getMatch().getFinalist().getSex());
+            match.setFinalist(finalistDTO);
+
             dto.setMatch(match);
 
             EventFullDTO eventDTO = new EventFullDTO();

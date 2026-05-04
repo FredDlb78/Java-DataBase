@@ -2,11 +2,9 @@ package com.mycompany.tennis.service;
 
 import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.dao.MatchDaoImpl;
-import com.mycompany.tennis.dto.EventFullDTO;
-import com.mycompany.tennis.dto.MatchDTO;
-import com.mycompany.tennis.dto.PlayerDTO;
-import com.mycompany.tennis.dto.TournamentDTO;
+import com.mycompany.tennis.dto.*;
 import com.mycompany.tennis.entity.Match;
+import com.mycompany.tennis.entity.Score;
 import com.mycompany.tennis.entity.Tournament;
 import com.mycompany.tennis.repository.MatchRepositoryImpl;
 import com.mycompany.tennis.repository.ScoreRepositoryImpl;
@@ -67,6 +65,18 @@ public class MatchService {
             eventDTO.setTournamentDTO(tournamentDTO);
 
             dto.setEvent(eventDTO);
+
+            ScoreFullDTO scoreDTO = new ScoreFullDTO();
+            Score score = match.getScore();
+            scoreDTO.setId(score.getId());
+            scoreDTO.setSet1(score.getSet1());
+            scoreDTO.setSet2(score.getSet2());
+            scoreDTO.setSet3(score.getSet3());
+            scoreDTO.setSet4(score.getSet4());
+            scoreDTO.setSet5(score.getSet5());
+
+            dto.setScore(scoreDTO);
+            scoreDTO.setMatch(matchDTO);
 
             tx.commit();
         } catch (Exception e) {

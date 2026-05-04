@@ -22,7 +22,7 @@ public class Match {
     @JoinColumn(name = "ID_EPREUVE")
     private Event event;
 
-    @Transient
+    @OneToOne(mappedBy = "match", fetch = FetchType.LAZY)
     private Score score;
 
     public Long getId() {

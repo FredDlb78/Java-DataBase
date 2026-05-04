@@ -6,6 +6,7 @@ public class MatchDTO {
     private PlayerDTO winner;
     private PlayerDTO finalist;
     private EventFullDTO event;
+    private ScoreFullDTO score;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class MatchDTO {
 
     public void setEvent(EventFullDTO event) {
         this.event = event;
+    }
+
+    public ScoreFullDTO getScore() {
+        return score;
+    }
+
+    public void setScore(ScoreFullDTO score) {
+        this.score = score;
     }
 }
