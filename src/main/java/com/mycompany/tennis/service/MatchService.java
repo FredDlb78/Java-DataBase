@@ -4,6 +4,7 @@ import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.dao.MatchDaoImpl;
 import com.mycompany.tennis.dto.*;
 import com.mycompany.tennis.entity.Match;
+import com.mycompany.tennis.entity.Player;
 import com.mycompany.tennis.entity.Score;
 import com.mycompany.tennis.entity.Tournament;
 import com.mycompany.tennis.repository.MatchRepositoryImpl;
@@ -90,6 +91,38 @@ public class MatchService {
             }
         }
         return dto;
+    }
+
+    public void greenCarpet(Long id) {
+        Session session = null;
+        Transaction tx = null;
+        Match match = null;
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+            match = matchRepository.getById(id);
+
+            Player formerWinner = match.getWinner();
+            match.setWinner(match.getFinalist());
+            match.setFinalist(formerWinner);
+
+            match.getScore().setSet1((byte)0);
+            match.getScore().setSet2((byte)0);
+            match.getScore().setSet3((byte)0);
+            match.getScore().setSet4((byte)0);
+            match.getScore().setSet5((byte)0);
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
     public void saveNewMatch(Match match) {
