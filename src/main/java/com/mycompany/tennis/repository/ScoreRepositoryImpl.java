@@ -2,14 +2,12 @@ package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
 import com.mycompany.tennis.HibernateUtil;
-import com.mycompany.tennis.entity.Player;
+import com.mycompany.tennis.entity.Match;
 import com.mycompany.tennis.entity.Score;
 import org.hibernate.Session;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScoreRepositoryImpl {
 
@@ -80,6 +78,12 @@ public class ScoreRepositoryImpl {
             Score score = session.get(Score.class, id);
             System.out.println("Score lu.");
         return score;
+    }
+
+    public void delete(Long id) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Score score = session.get(Score.class, id);
+        session.delete(score);
     }
 
 }

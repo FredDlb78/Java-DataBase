@@ -3,11 +3,14 @@ package com.mycompany.tennis.service;
 import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.dao.MatchDaoImpl;
 import com.mycompany.tennis.dto.*;
+import com.mycompany.tennis.entity.Event;
 import com.mycompany.tennis.entity.Match;
 import com.mycompany.tennis.entity.Player;
 import com.mycompany.tennis.entity.Score;
 import com.mycompany.tennis.entity.Tournament;
+import com.mycompany.tennis.repository.EventRepositoryImpl;
 import com.mycompany.tennis.repository.MatchRepositoryImpl;
+import com.mycompany.tennis.repository.PlayerRepositoryImpl;
 import com.mycompany.tennis.repository.ScoreRepositoryImpl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,12 +19,16 @@ public class MatchService {
 
     private ScoreRepositoryImpl scoreRepository;
     private MatchRepositoryImpl matchRepository;
+    private EventRepositoryImpl eventRepository;
+    private PlayerRepositoryImpl playerRepository;
     private MatchDaoImpl matchDao;
     private MatchDTO matchDTO;
 
     public MatchService() {
         this.scoreRepository = new ScoreRepositoryImpl();
         this.matchRepository = new MatchRepositoryImpl();
+        this.eventRepository = new EventRepositoryImpl();
+        this.playerRepository = new PlayerRepositoryImpl();
         this.matchDao = new MatchDaoImpl();
         this.matchDTO = new MatchDTO();
     }
@@ -125,7 +132,67 @@ public class MatchService {
         }
     }
 
+    public void createMatch(MatchDTO matchDTO) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+
+            Match match = new Match();
+            match.setEvent(session.load(Event.class, matchDTO.getEvent().getId()));
+            match.setWinner(session.load(Player.class, matchDTO.getWinner().getId()));
+            match.setFinalist(session.load(Player.class, matchDTO.getFinalist().getId()));
+            session.persist(match);
+
+            ScoreFullDTO scoreDTO = matchDTO.getScore();
+            Score score = new Score();
+            score.setSet1(scoreDTO.getSet1());
+            score.setSet2(scoreDTO.getSet2());
+            score.setSet3(scoreDTO.getSet3());
+            score.setSet4(scoreDTO.getSet4());
+            score.setSet5(scoreDTO.getSet5());
+            score.setMatch(match);
+            session.persist(score);
+
+            tx.commit();
+            System.out.println("Match ajouté.");
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     public void saveNewMatch(Match match) {
         matchDao.createMatchWithScore(match);
+    }
+
+    public void deleteMatch(Long id) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+
+            matchRepository.delete(id);
+
+            tx.commit();
+            System.out.println("Match supprimé.");
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }
