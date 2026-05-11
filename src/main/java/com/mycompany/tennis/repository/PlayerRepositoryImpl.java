@@ -104,10 +104,11 @@ public class PlayerRepositoryImpl {
         return player;
     }
 
-    public List<Player> getPlayersList() {
+    public List<Player> getPlayersList(char sex) {
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Query<Player> query = session.createQuery("select p from Player p", Player.class);
+        Query<Player> query = session.createQuery("select p from Player p where p.sex=?0", Player.class);
+        query.setParameter(0, sex);
         List<Player> players = query.getResultList();
         System.out.println("Joueurs lus");
 
