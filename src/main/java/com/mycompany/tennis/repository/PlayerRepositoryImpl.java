@@ -5,6 +5,7 @@ import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -104,49 +105,12 @@ public class PlayerRepositoryImpl {
     }
 
     public List<Player> getPlayersList() {
-        Connection conn = null;
-        List<Player> players = new ArrayList<>();
-        try {
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-            conn = dataSource.getConnection();
 
-            conn.setAutoCommit(false);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Query<Player> query = session.createQuery("select p from Player p", Player.class);
+        List<Player> players = query.getResultList();
+        System.out.println("Joueurs lus");
 
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT ID, NOM, PRENOM, SEXE FROM JOUEUR");
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                Player player = new Player();
-                player.setId(rs.getLong("ID"));
-                player.setLastname(rs.getString("NOM"));
-                player.setFirstname(rs.getString("PRENOM"));
-                player.setSex(rs.getString("SEXE").charAt(0));
-                players.add(player);
-            }
-
-            conn.commit();
-
-            //registeredModifications.close();
-            preparedStatement.close();
-
-            System.out.println("Joueur lu.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
         return players;
     }
 }
