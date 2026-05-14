@@ -19,7 +19,7 @@ public class EventRepositoryImpl {
     public List<Event> getEventsList(String eventCode) {
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Query<Event> query = session.createQuery("select e from Event e where e.tournament.code=?0", Event.class);
+        Query<Event> query = session.createQuery("select e from Event e join fetch e.tournament where e.tournament.code=?0", Event.class);
         query.setParameter(0, eventCode);
         List<Event> events = query.getResultList();
         System.out.println("Epreuves lues");
