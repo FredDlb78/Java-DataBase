@@ -49,16 +49,18 @@ public class TournamentService {
     }
 
     public void createTournament(TournamentDTO dto) {
-        Session session = null;
-        Transaction tx = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            tx = session.beginTransaction();
+            em = EntityManagerHolder.getCurrentEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
             Tournament tournament = new Tournament();
             tournament.setId(dto.getId());
             tournament.setCode(dto.getCode());
             tournament.setName(dto.getName());
             tournamentRepository.create(tournament);
+            dto.setId(tournament.getId());
             tx.commit();
         } catch (Exception e) {
             if ( tx != null) {
@@ -67,18 +69,20 @@ public class TournamentService {
             e.printStackTrace();
         }
         finally {
-            if (session != null) {
-                session.close();
+            if (em != null) {
+                em.close();
             }
         }
     }
 
     public void deleteTournament(Long id) {
-        Session session = null;
-        Transaction tx = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
         try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            tx = session.beginTransaction();
+            em = EntityManagerHolder.getCurrentEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+
             tournamentRepository.delete(id);
             tx.commit();
         } catch (Exception e) {
@@ -87,8 +91,8 @@ public class TournamentService {
             }
             e.printStackTrace();
         } finally {
-            if (session != null) {
-                session.close();
+            if (em != null) {
+                em.close();
             }
         }
     }

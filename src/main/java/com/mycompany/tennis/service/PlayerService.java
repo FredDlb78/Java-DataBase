@@ -1,5 +1,6 @@
 package com.mycompany.tennis.service;
 
+import com.mycompany.tennis.EntityManagerHolder;
 import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.dto.PlayerDTO;
 import com.mycompany.tennis.entity.Player;
@@ -7,7 +8,9 @@ import com.mycompany.tennis.repository.PlayerRepositoryImpl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,15 +104,13 @@ public class PlayerService {
     }
 
     public List<PlayerDTO> getPlayersList(char sex) {
-        Session session = null;
-        Transaction tx = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
         List<PlayerDTO> playerDTOS = new ArrayList<>();
         try {
-
-            EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("tennis-unit");
-
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            tx = session.beginTransaction();
+            em = EntityManagerHolder.getCurrentEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
 
             List<Player> players = playerRepository.getPlayersList(sex);
 
@@ -129,8 +130,8 @@ public class PlayerService {
             }
             e.printStackTrace();
         } finally {
-            if (session != null) {
-                session.close();
+            if (em != null) {
+                em.close();
             }
         }
         return playerDTOS;

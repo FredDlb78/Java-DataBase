@@ -1,7 +1,5 @@
 package com.mycompany.tennis.entity;
 
-import org.hibernate.annotations.NamedQuery;
-
 import javax.persistence.*;
 
 

@@ -23,7 +23,7 @@ public class EntityManagerHolder {
     public static EntityManager getCurrentEntityManager() {
         EntityManager entityManager = entityManagerThreadLocal.get();
 
-        if (entityManager == null) {
+        if (entityManager == null || !entityManager.isOpen()) {
 
             // Start the conversation by creating the EntityManager for this thread
             entityManager = entityManagerFactory.createEntityManager();

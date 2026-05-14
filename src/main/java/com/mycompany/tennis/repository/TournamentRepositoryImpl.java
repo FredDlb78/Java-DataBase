@@ -17,26 +17,9 @@ import java.util.List;
 public class TournamentRepositoryImpl {
 
     public void create(Tournament tournament) {
-        Session session = null;
-        Transaction tx = null;
-        try {
-
-            session = HibernateUtil.getSessionFactory().openSession();
-            tx = session.beginTransaction();
-            session.persist(tournament);
-            tx.commit();
-
-            System.out.println("Tournoi créé.");
-        } catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        EntityManager em =  EntityManagerHolder.getCurrentEntityManager();
+        em.persist(tournament);
+        System.out.println("Tournoi créé.");
     }
 
     public void update(Tournament tournament) {
@@ -76,9 +59,11 @@ public class TournamentRepositoryImpl {
     }
 
     public void delete(Long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Tournament tournament = session.get(Tournament.class, id);
-        session.delete(tournament);
+
+        EntityManager em = EntityManagerHolder.getCurrentEntityManager();
+        Tournament tournament = em.find(Tournament.class, id);
+        tournament.setId(id);
+        em.remove(tournament);
         System.out.println("Tournoi supprimé.");
     }
 

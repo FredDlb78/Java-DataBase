@@ -1,5 +1,6 @@
 package com.mycompany.tennis.service;
 
+import com.mycompany.tennis.EntityManagerHolder;
 import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.dto.EventFullDTO;
 import com.mycompany.tennis.dto.EventLightDTO;
@@ -11,6 +12,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.mycompany.tennis.entity.Player;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -115,15 +118,17 @@ public class EventService {
     }
 
     public List<EventFullDTO> getEventsList(String eventCode) {
-        Session session = null;
-        Transaction tx = null;
+
+        EntityManager em = null;
+        EntityTransaction tx = null;
         List<EventFullDTO> eventDTOS = new ArrayList<>();
         try {
-            session = HibernateUtil.getSessionFactory().getCurrentSession();
-            tx = session.beginTransaction();
+            em = EntityManagerHolder.getCurrentEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
             List<Event> events = eventRepository.getEventsList(eventCode);
 
-            for (Event event: events) {
+            for (Event event : events) {
                 final EventFullDTO eventDTO = new EventFullDTO();
                 eventDTO.setId(event.getId());
                 eventDTO.setYear(event.getYear());
@@ -143,8 +148,8 @@ public class EventService {
             }
             e.printStackTrace();
         } finally {
-            if (session != null) {
-                session.close();
+            if (em != null) {
+                em.close();
             }
         }
         return eventDTOS;
