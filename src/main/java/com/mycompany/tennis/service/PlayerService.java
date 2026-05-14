@@ -7,6 +7,8 @@ import com.mycompany.tennis.repository.PlayerRepositoryImpl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +105,9 @@ public class PlayerService {
         Transaction tx = null;
         List<PlayerDTO> playerDTOS = new ArrayList<>();
         try {
+
+            EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("tennis-unit");
+
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             tx = session.beginTransaction();
 
