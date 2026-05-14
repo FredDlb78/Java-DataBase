@@ -11,7 +11,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.mycompany.tennis.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class EventService {
 
@@ -110,5 +112,41 @@ public class EventService {
             }
         }
         return event;
+    }
+
+    public List<EventFullDTO> getEventsList(String eventCode) {
+        Session session = null;
+        Transaction tx = null;
+        List<EventFullDTO> eventDTOS = new ArrayList<>();
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+            List<Event> events = eventRepository.getEventsList(eventCode);
+
+            for (Event event: events) {
+                final EventFullDTO eventDTO = new EventFullDTO();
+                eventDTO.setId(event.getId());
+                eventDTO.setYear(event.getYear());
+                eventDTO.setEventType(event.getEventType());
+                TournamentDTO tournamentDTO = new TournamentDTO();
+                tournamentDTO.setId(event.getTournament().getId());
+                tournamentDTO.setCode(event.getTournament().getCode());
+                tournamentDTO.setName(event.getTournament().getName());
+                eventDTO.setTournamentDTO(tournamentDTO);
+                eventDTOS.add(eventDTO);
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return eventDTOS;
     }
 }
